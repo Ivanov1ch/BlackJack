@@ -1,0 +1,13 @@
+/*
+// File:             MainMenu.java
+// Created:          2018/04/04
+// Author:           daniv (Daniel Ivanovich)
+// Description:      The main menu for the blackjack game.
+*/
+import java.util.Scanner;
+
+public class MainMenu {
+  public static void main (String[] args){
+  
+  }
+}

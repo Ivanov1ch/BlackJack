@@ -1,0 +1,13 @@
+/*
+// File:             HowToPlay.java
+// Created:          2018/04/04
+// Author:           danIv (Daniel Ivanovich)
+// Description:      Tell the user how to play Blackjack.
+*/
+
+
+public class HowToPlay {
+  public static void main (String[] args){
+  
+  }
+}
