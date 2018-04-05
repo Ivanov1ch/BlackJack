@@ -53,10 +53,11 @@ public class SinglePlayer {
     double money = 0;
 
     while(!false){
-      System.outprintln("How much money do you have? You must have at least 10 dollars to play.")
+      System.out.println("How much money do you have? You must have at least 10 dollars to play.");
       money = reader.nextDouble();
 
       if(money>=10.00)
+      {
         break;
     }
 
