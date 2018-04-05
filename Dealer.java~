@@ -13,33 +13,25 @@ public class Dealer {
     for(int i = 0; i < deck.length; i++){
       deck[i] = i + 1;
     }
-
-    for(int i = 0; i < deck.length; i++){
-      System.out.println(deck[i]);
-    }
+    suffleDeck(deck);
   }
 
-  public static void shuffleDeck(int[] deck){
+  public static void suffleDeck(int[] deck) {
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            int change = i + random.nextInt(deck.length - 1) + 1;
+            swap(deck, i, change);
+        }
 
-    Random gen = new Random();
-
-    for(int i = 0; i < 10000; i++){
-
-      int indexToChange = random.nextInt(deck.length - 1);
-      int indexToChangeTo = random.nextInt(deck.length - 1);
-
-      swap(deck, indexToChange, indexToChangeTo);
-
+        for(int i = 0; i < deck.length; i++){
+          System.out.println(deck[i]);
+        }
     }
 
-  }
-
-  public static void swap(int[] deck, int indexToChange, int indexToChangeTo) {
-
-    int temp = deck[indexToChange];
-    deck[indexToChange] = deck[indexToChangeTo];
-    deck[indexToChangeTo] = temp;
-
-  }
+    private static void swap(int[] deck, int i, int change) {
+        int helper = deck[i];
+        deck[i] = deck[change];
+        deck[change] = helper;
+    }
 
 }
