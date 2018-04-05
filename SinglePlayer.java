@@ -4,36 +4,37 @@
 // Author:           danIv
 // Description:      The single player game.
 */
- 
-import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
  
 public class SinglePlayer {
   public static void main (String[] args){
-    Random gen = new Random();
     Scanner reader = new Scanner(System.in);
-    Dealer dealer = new Dealer();
  
     String name = getName(reader);
-    double money = reader.nextDouble();
+    double money = getMoney(reader);
     
     double currentWager = 10.00; //Defaults to 10 per play
- 
-    if(money < 10.00)
-      System.out.println("You do not have enough money to play.");
- 
-    reader.nextLine();
- 
-    double wager = getWager(reader, currentWager);
     
-    dealer.main(null); //Init the deck
-    dealer.shuffleDeck(dealer.deck);
+    Dealer.initDeck(Dealer.deck); //Init the deck
+    Dealer.shuffleDeck(Dealer.deck);
  
-    Hand hand = new Hand();
- 
-    hand.initHand(dealer.dealStartingCards(dealer.deck));
- 
-    System.out.println(hand); //tell the player what cards they have
+    Hand playerHand = new Hand(Dealer.dealStartingCards(Dealer.deck));
+    
+    System.out.println("Dealing cards...");
+    
+    try
+    {
+      TimeUnit.SECONDS.sleep(2);
+    }catch(InterruptedException ie)
+    {
+      
+    }
+    
+    System.out.println("You have recieved a " + playerHand.hand.get(0).suit.symbol);
+    
+    
+    //tell the player what cards they have
  
     System.out.println("(H)it, (St)and, (Sp)lit, (D)ouble, (Su)rrender");
     String choice = reader.nextLine();
@@ -53,7 +54,7 @@ public class SinglePlayer {
     String name = "";
     
     while(!false){
-      System.out.println("Welcome to the table, What is your name and how much money do you have you must have at least 10 dollars to begin?");
+      System.out.println("Welcome to the table, what is your name?");
       name = reader.nextLine();
       
       if(name.length() >= 3){
@@ -84,4 +85,19 @@ public class SinglePlayer {
     
   }
   
+  public static double getMoney(Scanner reader){
+    double money = 0.00;
+    while(true){
+      System.out.println("How much money do you have? You must have at least 10 dollars to begin.");
+      money = reader.nextDouble();
+      reader.nextLine();
+        
+      if(money >= 10.00)
+        break;
+      
+      System.out.println("Sorry, but that's not a valid amount of money!");
+    }
+      
+  return money;
+  }
 }

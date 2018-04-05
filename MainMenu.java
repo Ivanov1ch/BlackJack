@@ -65,7 +65,7 @@ public class MainMenu {
       
       /*
       if(input == 1)
-        //Run 1 player Blackjack here
+        SinglePlayer.main(null);
       else if(input == 2)
         //Run 2 player Blackjack here
       else if(input == 3)

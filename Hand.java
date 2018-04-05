@@ -4,16 +4,12 @@
 // Author:           danIv (Daniel Ivanovich)
 // Description:      The class for a hand of cards.
 */
-
+import java.util.List;
 
 public class Hand {
-  public static int[] hand= new int[2];
-  public static void main (String[] args){
+  public List<Card> hand;
   
+  Hand(List<Card> cards){
+    this.hand = cards;
   }
-  
-  public static void initHand(int[] cards){
-    hand[0] = cards[0];
-    hand[1] = cards[1];
-  } 
 }
