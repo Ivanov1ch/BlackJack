@@ -1,0 +1,13 @@
+/*
+// File:             SinglePlayer.java
+// Created:          2018/04/05
+// Author:           [author]
+// Description:      Describe function here.
+*/
+
+
+public class SinglePlayer {
+  public static void main (String[] args){
+  
+  }
+}
