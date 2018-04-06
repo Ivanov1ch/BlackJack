@@ -34,7 +34,7 @@ public class SinglePlayer {
     }
     
     
-    System.out.println("You have recieved a " + playerHand.hand.get(0).cardNumber + playerHand.hand.get(0).suit.symbol);
+    System.out.println("You have recieved a " + playerHand.hand.get(0).suit.symbol + playerHand.hand.get(0).cardNumber + " and a " + playerHand.hand.get(1).suit.symbol + playerHand.hand.get(1).cardNumber);
     
     String choice = "";
 

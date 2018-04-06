@@ -11,53 +11,52 @@ import java.util.List;
 import java.util.Arrays;
 
 public class Dealer {
-  
-  public static Stack<Card> deck = new Stack<Card>();
 
-  public static void shuffleDeck(Stack<Card> deck){
+    public static Stack<Card> deck = new Stack<Card>();
 
-    Random random = new Random();
+    public static void shuffleDeck(Stack<Card> deck) {
 
-    for(int i = 0; i < 10000; i++){
+        Random random = new Random();
 
-      int indexToChange = random.nextInt(deck.size());
-      int indexToChangeTo = random.nextInt(deck.size());
+        for (int i = 0; i < 10000; i++) {
 
-      swap(deck, indexToChange, indexToChangeTo);
+            int indexToChange = random.nextInt(deck.size());
+            int indexToChangeTo = random.nextInt(deck.size());
+
+            swap(deck, indexToChange, indexToChangeTo);
+
+        }
 
     }
-     
-    for(int i = 0; i < deck.size(); i++){
-      System.out.println(deck.get(i).cardNumber);
+
+    public static void initDeck(Stack<Card> deck) {
+        final int NUM_SUITS = 4;
+        final int CARDS_PER_SUIT = 12;
+        final int DECKS_USED = 6;
+
+        for(int dck = 1; dck <= DECKS_USED; dck++) {
+            for (int suit = 0; suit < NUM_SUITS; suit++) {
+                for (int card = 2; card < CARDS_PER_SUIT; card++) {
+                    deck.add(Card.initCard(card, Card.Suit.values()[suit]));
+                }
+            }
+        }
+
     }
-    
-  }
-  
-  public static void initDeck(Stack<Card> deck){
-    final int NUM_SUITS = 4;
-    final int CARDS_PER_SUIT = 12;
-    
-    for(int suit = 0; suit < NUM_SUITS; suit++){
-      for(int card = 2; card < CARDS_PER_SUIT; card++){
-        deck.add(Card.initCard(card, Card.Suit.values()[suit]));
-      }
+
+    public static void swap(Stack<Card> deck, int indexToChange, int indexToChangeTo) {
+
+        Card temp = deck.get(indexToChange);
+        deck.set(indexToChange, deck.get(indexToChangeTo));
+        deck.set(indexToChangeTo, temp);
+
     }
-    
-  }
 
-  public static void swap(Stack<Card> deck, int indexToChange, int indexToChangeTo) {
+    public static List<Card> dealStartingCards(Stack<Card> deck) {
+        Card cardOne = deck.pop();
+        Card cardTwo = deck.pop();
 
-    Card temp = deck.get(indexToChange);
-    deck.set(indexToChange, deck.get(indexToChangeTo));
-    deck.set(indexToChangeTo, temp);
-
-  }
-  
-  public static List<Card> dealStartingCards(Stack<Card> deck){
-    Card cardOne = deck.pop();
-    Card cardTwo = deck.pop();
-   
-    return Arrays.asList(cardOne, cardTwo);
-  }
+        return Arrays.asList(cardOne, cardTwo);
+    }
 
 }
