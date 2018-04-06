@@ -20,8 +20,8 @@ public class Dealer {
 
     for(int i = 0; i < 10000; i++){
 
-      int indexToChange = random.nextInt(deck.size() - 1);
-      int indexToChangeTo = random.nextInt(deck.size() - 1);
+      int indexToChange = random.nextInt(deck.size());
+      int indexToChangeTo = random.nextInt(deck.size());
 
       swap(deck, indexToChange, indexToChangeTo);
 
