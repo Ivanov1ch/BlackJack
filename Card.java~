@@ -11,16 +11,16 @@ public class Card {
   public int cardNumber;
   public Suit suit;
   
-  enum Suit
+  public enum Suit
   {
-      DIAMONDS('?'),
-      HEARTS('?'),
-      SPADES('?'),
-      CLUBS('?');
+      DIAMONDS("\u9824"),
+      HEARTS("\u9829"),
+      SPADES("\u9824"),
+      CLUBS("\u9827");
       
-      public final char symbol;
+      public final String symbol;
       
-      Suit(char character)
+      Suit(String character)
       {
         this.symbol = character;
       }

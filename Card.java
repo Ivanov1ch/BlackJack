@@ -13,10 +13,10 @@ public class Card {
   
   public enum Suit
   {
-      DIAMONDS("\u9824"),
-      HEARTS("\u9829"),
-      SPADES("\u9824"),
-      CLUBS("\u9827");
+      DIAMONDS("\u2660"),
+      HEARTS("\u2660"),
+      SPADES("\u2660"),
+      CLUBS("\u2660");
       
       public final String symbol;
       

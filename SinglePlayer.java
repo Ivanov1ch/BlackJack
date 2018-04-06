@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class SinglePlayer {
   public static void main (String[] args){
     Scanner reader = new Scanner(System.in);
- 
+    
     String name = getName(reader);
     double money = getMoney(reader);
     
@@ -33,7 +33,8 @@ public class SinglePlayer {
       
     }
     
-    System.out.println("You have recieved a " + playerHand.hand.get(0).suit.symbol);
+    
+    System.out.println("You have recieved a " + playerHand.hand.get(0).cardNumber + playerHand.hand.get(0).suit.symbol);
     
     String choice = "";
 

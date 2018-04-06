@@ -26,7 +26,11 @@ public class Dealer {
       swap(deck, indexToChange, indexToChangeTo);
 
     }
-
+     
+    for(int i = 0; i < deck.size(); i++){
+      System.out.println(deck.get(i).cardNumber);
+    }
+    
   }
   
   public static void initDeck(Stack<Card> deck){
@@ -35,7 +39,7 @@ public class Dealer {
     
     for(int suit = 0; suit < NUM_SUITS; suit++){
       for(int card = 2; card < CARDS_PER_SUIT; card++){
-        deck.push(Card.initCard(card, Card.Suit.values()[suit]));
+        deck.add(Card.initCard(card, Card.Suit.values()[suit]));
       }
     }
     

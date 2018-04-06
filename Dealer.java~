@@ -6,59 +6,54 @@
 */
 
 import java.util.Random;
+import java.util.Stack;
+import java.util.List;
+import java.util.Arrays;
 
 public class Dealer {
-  public static int[] deck = new int[52];
-  public static void main (String[] args){
-    for(int i = 0; i < deck.length; i++){
-      deck[i] = i + 1;
-    }
+  
+  public static Stack<Card> deck = new Stack<Card>();
 
-    dealStartingCards(deck);
-  }
-
-  public static void shuffleDeck(int[] deck){
+  public static void shuffleDeck(Stack<Card> deck){
 
     Random random = new Random();
 
     for(int i = 0; i < 10000; i++){
 
-      int indexToChange = random.nextInt(deck.length - 1);
-      int indexToChangeTo = random.nextInt(deck.length - 1);
+      int indexToChange = random.nextInt(deck.size() - 1);
+      int indexToChangeTo = random.nextInt(deck.size() - 1);
 
       swap(deck, indexToChange, indexToChangeTo);
 
     }
 
   }
-
-  public static void swap(int[] deck, int indexToChange, int indexToChangeTo) {
-
-    int temp = deck[indexToChange];
-    deck[indexToChange] = deck[indexToChangeTo];
-    deck[indexToChangeTo] = temp;
-
-  }
   
-  public static int[] dealStartingCards(int[] deck){
-    int cardOne = deck[0];
-    int cardTwo = deck[1];
+  public static void initDeck(Stack<Card> deck){
+    final int NUM_SUITS = 4;
+    final int CARDS_PER_SUIT = 12;
     
-    removeCard(deck);
-    removeCard(deck);
-    
-    int[] hand = {cardOne, cardTwo};
-    return hand;
-  }
-  
-  public static void removeCard(int[] deck){
-    int removeIndex = 0;
-
-    for(int i = removeIndex; i < deck.length -1; i++){
-      deck[i] = deck[i + 1];
+    for(int suit = 0; suit < NUM_SUITS; suit++){
+      for(int card = 2; card < CARDS_PER_SUIT; card++){
+        deck.push(Card.initCard(card, Card.Suit.values()[suit]));
+      }
     }
     
-    deck[deck.length - 1] = 0;
+  }
+
+  public static void swap(Stack<Card> deck, int indexToChange, int indexToChangeTo) {
+
+    Card temp = deck.get(indexToChange);
+    deck.set(indexToChange, deck.get(indexToChangeTo));
+    deck.set(indexToChangeTo, temp);
+
+  }
+  
+  public static List<Card> dealStartingCards(Stack<Card> deck){
+    Card cardOne = deck.pop();
+    Card cardTwo = deck.pop();
+   
+    return Arrays.asList(cardOne, cardTwo);
   }
 
 }
