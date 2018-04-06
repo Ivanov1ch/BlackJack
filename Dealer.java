@@ -14,49 +14,58 @@ public class Dealer {
 
     public static Stack<Card> deck = new Stack<Card>();
 
-    public static void shuffleDeck(Stack<Card> deck) {
+    public static void shuffleDeck(Stack<Card> gameDeck) {
 
         Random random = new Random();
 
         for (int i = 0; i < 10000; i++) {
 
-            int indexToChange = random.nextInt(deck.size());
-            int indexToChangeTo = random.nextInt(deck.size());
+            int indexToChange = random.nextInt(gameDeck.size());
+            int indexToChangeTo = random.nextInt(gameDeck.size());
 
-            swap(deck, indexToChange, indexToChangeTo);
+            swap(gameDeck, indexToChange, indexToChangeTo);
 
         }
 
     }
 
-    public static void initDeck(Stack<Card> deck) {
+    public static void initDeck(Stack<Card> gameDeck) {
         final int NUM_SUITS = 4;
-        final int CARDS_PER_SUIT = 12;
+        final int CARDS_PER_SUIT = 13;
         final int DECKS_USED = 6;
 
         for(int dck = 1; dck <= DECKS_USED; dck++) {
             for (int suit = 0; suit < NUM_SUITS; suit++) {
-                for (int card = 2; card < CARDS_PER_SUIT; card++) {
-                    deck.add(Card.initCard(card, Card.Suit.values()[suit]));
+                for (int card = 2; card <= CARDS_PER_SUIT; card++) {
+                    gameDeck.add(Card.initCard(card, Card.Suit.values()[suit]));
                 }
             }
         }
 
-    }
-
-    public static void swap(Stack<Card> deck, int indexToChange, int indexToChangeTo) {
-
-        Card temp = deck.get(indexToChange);
-        deck.set(indexToChange, deck.get(indexToChangeTo));
-        deck.set(indexToChangeTo, temp);
 
     }
 
-    public static List<Card> dealStartingCards(Stack<Card> deck) {
-        Card cardOne = deck.pop();
-        Card cardTwo = deck.pop();
+    public static void swap(Stack<Card> gameDeck, int indexToChange, int indexToChangeTo) {
+
+        Card temp = gameDeck.get(indexToChange);
+        gameDeck.set(indexToChange, gameDeck.get(indexToChangeTo));
+        gameDeck.set(indexToChangeTo, temp);
+
+    }
+
+    public static List<Card> dealStartingCards(Stack<Card> gameDeck) {
+        Card cardOne = gameDeck.pop();
+        Card cardTwo = gameDeck.pop();
 
         return Arrays.asList(cardOne, cardTwo);
+    }
+
+    public static void dealCard(List<Card> hand){
+        hand.add(deck.pop());
+    }
+
+    public static void resetDeck(Stack<Card> gameDeck){
+        gameDeck.removeAllElements();
     }
 
 }
