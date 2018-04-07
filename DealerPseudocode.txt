@@ -6,7 +6,3 @@ if less than or equal to 16 points
 	hit
 if soft 17
 	hit
-if 17 or 18 or 19 points
-	calculate odds of 4, 3, or 2
-	if more than 35% chance, hit
-	else stands

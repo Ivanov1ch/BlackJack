@@ -12,30 +12,38 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class SinglePlayer {
+    public static double money;
+    public static double wager;
+    public static double insuranceWager;
     public static void main(String[] args) {
         Scanner reader = new Scanner(System.in);
 
-        String name = getName(reader);
-        double money = getMoney(reader);
+        String name = GameManager.getName(reader);
+        money = GameManager.getMoney(reader);
 
         if (money == -1) {
             System.exit(10); //10 = Bad money
         }
 
         boolean playing = true;
-        boolean playStillGoing = true;
-        boolean won = false;
 
         while (playing) {
+            if(money < 1.00){
+                System.out.println("You don't have enough money to keep playing!");
+                break;
+            }
             Dealer.resetDeck(Dealer.deck);
             Dealer.initDeck(Dealer.deck);
             Dealer.shuffleDeck(Dealer.deck);
-            double wager;
-            int playPoints;
+
+            boolean blackjack = false;
+            boolean bust = false;
+            boolean playStillGoing = true;
 
             Hand playerHand = new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
+            Dealer.hand =  new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
 
-            wager = getWager(reader, 1.00);
+            wager = GameManager.getWager(reader, 1.00);
 
             System.out.println("Dealing cards...\n");
 
@@ -46,48 +54,78 @@ public class SinglePlayer {
 
             }
 
-            System.out.println("You have recieved a " + playerHand.hand.get(0).suit.symbol + playerHand.hand.get(0).cardNumber + " and a " + playerHand.hand.get(1).suit.symbol + playerHand.hand.get(1).cardNumber);
-            System.out.println(Hand.getPoints(playerHand));
+            System.out.println("You have recieved a " + playerHand.hand.get(0).suit.symbol + playerHand.hand.get(0).name + " and a " + playerHand.hand.get(1).suit.symbol + playerHand.hand.get(1).name);
 
-            if(Hand.getPoints(playerHand) == 21){
+            System.out.println("The dealer has recieved a " + Dealer.hand.hand.get(0).suit.symbol + Dealer.hand.hand.get(0).name + " and an unknown card.");
+
+            if(Dealer.hand.hand.get(0).name.equals("Ace")){
+                insuranceWager = GameManager.getInsuranceWager(reader, 1.00);
+            }
+
+            if(GameManager.checkForBlackjack(playerHand)){
                 //Blackjack!
                 System.out.println("That's a blackjack! The dealer now must reveal his cards");
                 playStillGoing = false;
-                //See if you won
-                //Blackjack wins 3:2, so they win 1.5 * wager
+                blackjack = true;
             }
 
+            boolean firstPlay = true;
+
             while (playStillGoing) {
-                String choice = getChoice(reader);
+                String choice = GameManager.getChoice(reader);
 
                 if (choice.equals("H")) {
                     Dealer.dealCard(playerHand.hand);
-                    System.out.println("You have recieved a " + playerHand.hand.get(playerHand.hand.size() - 1).suit.symbol + playerHand.hand.get(playerHand.hand.size() - 1).cardNumber);
+                    System.out.println("You have recieved a " + playerHand.hand.get(playerHand.hand.size() - 1).suit.symbol + playerHand.hand.get(playerHand.hand.size() - 1).name);
                 }
                 else if (choice.equals("D")) {
                     Dealer.dealCard(playerHand.hand);
                     wager *= 2;
                     System.out.println("Upping your bid to $" + wager);
-                    System.out.println("You have recieved a " + playerHand.hand.get(playerHand.hand.size() - 1).suit.symbol + playerHand.hand.get(playerHand.hand.size() - 1).cardNumber);
+                    System.out.println("You have recieved a " + playerHand.hand.get(playerHand.hand.size() - 1).suit.symbol + playerHand.hand.get(playerHand.hand.size() - 1).name);
                     playStillGoing = false;
                 }
-                //    else if(choice.equals("St"))
-                //      //End the turn of the player
-                //    else if(choice.equals("Sp"))
-                //      //Split the player's hand into two hands
-                //    else
-
-                playPoints = Hand.getPoints(playerHand);
-                System.out.println(playerHand.hand.get(playerHand.hand.size() - 1).cardNumber);
-                System.out.println(playPoints);
-
-                if(playPoints > 21){
-                    won = false;
-                    money -= wager;
-                    System.out.println("You busted! You lose your bet!\nYou have $" + money + " left.");
+                else if(choice.equals("St")){
+                    playStillGoing = false;
                     break;
                 }
+                //    else if(choice.equals("Sp"))
+                //      //Split the player's hand into two hands
+                else {
+                    if(firstPlay){
+                        wager *= 0.5;
+                        playerHand.active = false;
+                        firstPlay = false;
+                        break;
+                    }
+                    else{
+                        System.out.println("Sorry, but you can only Surrender on your first hand!");
+                        continue;
+                    }
+                }
+
+                System.out.println("Your current hand is: " + Hand.printFullHand(playerHand));
+
+                firstPlay = false;
+
+                bust = GameManager.checkForBust(playerHand);
+
+                if(bust){
+                    playStillGoing = false;
+                }
+
             }
+
+            Dealer.useTurn(Dealer.hand, Dealer.deck);
+
+            getWinner(playerHand, Dealer.hand, blackjack, bust);
+
+            System.out.println("\nYou have $" + money + " left.");
+
+            Hand.clearHand(playerHand);
+            Hand.clearHand(Dealer.hand);
+
+
 
             while(true) {
                 System.out.println("Would you like to play another hand? Y/N");
@@ -108,81 +146,52 @@ public class SinglePlayer {
         }
     }
 
-    public static double getMoney(Scanner reader) {
-        double money = 0;
-
-        while (!false) {
-            System.out.println("How much money do you have? You must have at least 1 dollar to play.");
-            money = reader.nextDouble();
-            reader.nextLine();
-
-            if (money >= 1.00) {
-                break;
-            }
-
-            System.out.println("You do not have enough money to begin. Please get more money and try again.");
-            return -1;
+    public static void getWinner(Hand playerHand, Hand dealerHand, boolean playerBlackjack, boolean playerBust){
+        if(playerBust){
+            //The player goes first, so it checks if the player busted first.
+            System.out.println("You busted! You lose your wager of $" + wager + ".");
+            money -= wager;
         }
-
-        return money;
-    }
-
-    public static String getName(Scanner reader) {
-        String name = "";
-
-        while (!false) {
-            System.out.println("Welcome to the table, what is your name?");
-            name = reader.nextLine();
-
-            if (name.length() >= 3) {
-                break;
-            }
-
-            System.out.println("Sorry, but '" + name + "' is not a valid name.");
+        else if(GameManager.checkForBust(dealerHand)){
+            System.out.println("The dealer busted! You win your wager of $" + wager + ".");
+            money += wager;
         }
-
-        return name;
-    }
-
-    public static double getWager(Scanner reader, double currentWager) {
-        double wager = 0;
-        while (!false) {
-            System.out.println("What would you like to wager?");
-            wager = reader.nextDouble();
-            reader.nextLine();
-
-            if (wager >= currentWager) {
-                break;
+        else{
+            //Neither busted
+            if(playerBlackjack && GameManager.checkForBlackjack(dealerHand)){
+                //2 blackjacks == tie
+                System.out.println("It's a push! You don't lose or gain anything!");
             }
+            else if(playerBlackjack){
+                wager *= 1.5;
+                System.out.println("You got a blackjack! You win 3:2 on your wager, or $" + wager + ".");
+            }
+            else if(GameManager.checkForBlackjack(dealerHand)){
+                System.out.println("The dealer got a blackjack! You lose your $" + wager + " wager.");
+                money -= wager;
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    insuranceWager *= 2;
+                    System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
+                    money += insuranceWager;
+                }
 
-            System.out.println("Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + currentWager + ".");
-        }
-
-        return wager;
-
-    }
-
-    public static String getChoice(Scanner reader) {
-        String choice;
-        while (true) {
-            System.out.println("(H)it, (St)and, (Sp)lit, (D)ouble, (Su)rrender");
-            choice = reader.nextLine();
-            boolean accepted = false;
-
-            String[] acceptedAnswers = {"H", "St", "Sp", "D", "Su"};
-            for (int i = 0; i < acceptedAnswers.length; i++) {
-                if (choice.equals(acceptedAnswers[i])) {
-                    accepted = true;
-                    break;
+            }
+            else{
+                //No busts, no blackjacks
+                if(Hand.getPoints(playerHand) == Hand.getPoints(dealerHand)){
+                    System.out.println("It's a push! You don't lose or gain anything!");
+                }
+                else if(Hand.getPoints(playerHand) > Hand.getPoints(dealerHand)){
+                    System.out.println("You win! You get $" + wager + ".");
+                    money += wager;
+                }
+                else{
+                    System.out.println("You lose! You lose $" + wager + ".");
+                    money -= wager;
                 }
             }
-
-            if (accepted)
-                break;
-
-            System.out.println("Sorry, but '" + choice + "' is not an accepted input.\n");
         }
-
-        return choice;
     }
+
 }

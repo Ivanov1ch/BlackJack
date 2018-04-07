@@ -9,10 +9,12 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.List;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 public class Dealer {
 
     public static Stack<Card> deck = new Stack<Card>();
+    public static Hand hand;
 
     public static void shuffleDeck(Stack<Card> gameDeck) {
 
@@ -31,10 +33,10 @@ public class Dealer {
 
     public static void initDeck(Stack<Card> gameDeck) {
         final int NUM_SUITS = 4;
-        final int CARDS_PER_SUIT = 13;
+        final int CARDS_PER_SUIT = 14;
         final int DECKS_USED = 6;
 
-        for(int dck = 1; dck <= DECKS_USED; dck++) {
+        for (int dck = 1; dck <= DECKS_USED; dck++) {
             for (int suit = 0; suit < NUM_SUITS; suit++) {
                 for (int card = 2; card <= CARDS_PER_SUIT; card++) {
                     gameDeck.add(Card.initCard(card, Card.Suit.values()[suit]));
@@ -60,12 +62,69 @@ public class Dealer {
         return Arrays.asList(cardOne, cardTwo);
     }
 
-    public static void dealCard(List<Card> hand){
+    public static void dealCard(List<Card> hand) {
         hand.add(deck.pop());
     }
 
-    public static void resetDeck(Stack<Card> gameDeck){
+    public static void resetDeck(Stack<Card> gameDeck) {
         gameDeck.removeAllElements();
+    }
+
+    public static void useTurn(Hand myHand, Stack<Card> myDeck) {
+
+        boolean stillGoing = true;
+
+        System.out.println("\n\nYour turn is over. It is now the dealer's turn.\n\nFlipping over the card in the hole...");
+
+        //Wait
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ie) {
+
+        }
+
+        System.out.println("\n\nThe dealer's 2 cards are: " + Hand.printFullHand(Dealer.hand));
+
+        while (stillGoing) {
+
+            if (GameManager.checkForBust(myHand)) {
+                stillGoing = false;
+            } else if (Hand.getPoints(myHand) <= 16) {
+                System.out.println("The dealer has less than 16 points, and is hitting...");
+                dealCard(myHand.hand);
+                //Wait
+                try {
+                    TimeUnit.SECONDS.sleep(2);
+                } catch (InterruptedException ie) {
+
+                }
+                System.out.println("The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name);
+            } else if (GameManager.softNumber(myHand, 17)) {
+                //t's a soft 17
+                System.out.println("It's a soft 17. The dealer is hitting...");
+                dealCard(myHand.hand);
+                //Wait
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException ie) {
+
+                }
+                System.out.println("The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name);
+            } else {
+                System.out.println("The dealer is standing.\n");
+                stillGoing = false;
+            }
+
+        }
+
+        System.out.println("\n\nThe dealer's final cards are: " + Hand.printFullHand(Dealer.hand) + "\n");
+
+        //Wait
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ie) {
+
+        }
     }
 
 }
