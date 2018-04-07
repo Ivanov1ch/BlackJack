@@ -20,7 +20,6 @@ public class Hand {
     public static int getPoints(Hand inputtedHand){
         int points = 0;
 
-       // for (Card card : inputtedHand.hand){
           for(int i=0; i<inputtedHand.hand.size(); i++){
             if(!inputtedHand.hand.get(i).name.equals("Ace")){
                 if((!inputtedHand.hand.get(i).name.equals("King")) && (!inputtedHand.hand.get(i).name.equals("Queen")) && (!inputtedHand.hand.get(i).name.equals("Jack")))
@@ -28,19 +27,20 @@ public class Hand {
                 else
                     points += 10;
             }
-            else{
-                Hand tempHand = copyHandWithoutAces(copyHand(inputtedHand));
-
-                if(Hand.getPoints(tempHand) <= 10) {
-                    points += 11;
-                    acePoints = 11;
-                }
-                else {
-                    points += 1;
-                    acePoints = 1;
-                }
-
-            }
+        }
+        Hand tempHand = copyHandWithoutAces(copyHand(inputtedHand));
+        if(tempHand.hand.size() == 0){
+            //inputtedHand.hand.stream().forEach(System.out::println);
+            points = (11 + inputtedHand.hand.size() - 1);
+            //System.out.println(points);
+        }
+        else if(points <= 10) {
+            points += 11;
+            acePoints = 11;
+        }
+        else {
+            points += 1;
+            acePoints = 1;
         }
 
         return points;
@@ -63,10 +63,16 @@ public class Hand {
             tempList.add(Card.copyCard(inputtedHand.hand.get(i)));
         }
 
-        for(int i = 0; i < tempList.size(); i++){
-            if(tempList.get(i).name.equals("Ace"))
-                tempList.remove(tempList.get(i));
+        List<Card> removeList = new ArrayList<Card>();
+
+        for (Card card : tempList)
+        {
+            if (card.name.equals("Ace"))
+                removeList.add(card);
         }
+
+        for (Card card : removeList)
+            tempList.remove(card);
 
         Hand tempHand = new Hand(tempList);
 

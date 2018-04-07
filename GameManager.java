@@ -117,6 +117,10 @@ public class GameManager {
         while (true) {
             System.out.println("(H)it, (S)and, (D)ouble, (Su)rrender");
             choice = reader.nextLine();
+
+            String partOne = Character.toString(choice.charAt(0)).toUpperCase();
+            choice = partOne + choice.substring(1);
+
             boolean accepted = false;
 
             String[] acceptedAnswers = {"H", "S", "D", "Su"};

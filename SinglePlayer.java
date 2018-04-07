@@ -18,6 +18,7 @@ public class SinglePlayer {
         Scanner reader = new Scanner(System.in);
 
         String name = GameManager.getName(reader);
+
         money = GameManager.getMoney(reader);
 
         if (money == -1) {
@@ -27,8 +28,14 @@ public class SinglePlayer {
         boolean playing = true;
 
         while (playing) {
-            if(money < 1.00){
+            if(money < 0){
+                System.out.println("You really screwed up now, didn't you? Now you owe us $" + (-1 * money) + ".\nExpect a bill.");
+                playing = false;
+                break;
+            }
+            else if(money < 1.00){
                 System.out.println("You don't have enough money to keep playing!");
+                playing = false;
                 break;
             }
             Dealer.resetDeck(Dealer.deck);
@@ -42,7 +49,15 @@ public class SinglePlayer {
             Hand playerHand = new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
             Dealer.hand =  new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
 
-            wager = GameManager.getWager(reader, 1.00);
+
+            while(true) {
+                wager = GameManager.getWager(reader, 1.00);
+                if(wager <= money){
+                    break;
+                }
+
+                System.out.println("You entered more money than you currently have! Please enter a valid wager.");
+            }
 
             System.out.println("Dealing cards...\n");
 
@@ -58,7 +73,14 @@ public class SinglePlayer {
             System.out.println("The dealer has recieved a " + Dealer.hand.hand.get(0).suit.symbol + Dealer.hand.hand.get(0).name + " and an unknown card.");
 
             if(Dealer.hand.hand.get(0).name.equals("Ace")){
-                insuranceWager = GameManager.getInsuranceWager(reader, 1.00);
+                while(true) {
+                    insuranceWager = GameManager.getInsuranceWager(reader, 1.00);
+                    if(insuranceWager + wager <= money){
+                        break;
+                    }
+
+                    System.out.println("you're entering more money than you have to bet! Please wager a value less than or equal to " + (money - wager));
+                }
             }
 
             if(GameManager.checkForBlackjack(playerHand)){
@@ -122,7 +144,11 @@ public class SinglePlayer {
             Hand.clearHand(playerHand);
             Hand.clearHand(Dealer.hand);
 
-
+            if(money < 0){
+                System.out.println("\nYou really screwed up now, didn't you? Now you owe us $" + (-1 * money) + ".\nExpect a bill.\nGet out of here.\n");
+                playing = false;
+                break;
+            }
 
             while(true) {
                 System.out.println("Would you like to play another hand? Y/N");
@@ -148,20 +174,51 @@ public class SinglePlayer {
             //The player goes first, so it checks if the player busted first.
             System.out.println("You busted! You lose your wager of $" + wager + ".");
             money -= wager;
+            if(!GameManager.checkForBlackjack(dealerHand)){
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
+                    money -= insuranceWager;
+                }
+            }
+            else{
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    insuranceWager *= 2;
+                    System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
+                    money += insuranceWager;
+                }
+            }
         }
         else if(GameManager.checkForBust(dealerHand)){
             System.out.println("The dealer busted! You win your wager of $" + wager + ".");
             money += wager;
+            if(insuranceWager != 0.0){
+                //They took insurance
+                System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
+                money -= insuranceWager;
+            }
         }
         else{
             //Neither busted
             if(playerBlackjack && GameManager.checkForBlackjack(dealerHand)){
                 //2 blackjacks == tie
                 System.out.println("It's a push! You don't lose or gain anything!");
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    insuranceWager *= 2;
+                    System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
+                    money += insuranceWager;
+                }
             }
             else if(playerBlackjack){
                 wager *= 1.5;
                 System.out.println("You got a blackjack! You win 3:2 on your wager, or $" + wager + ".");
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
+                    money -= insuranceWager;
+                }
             }
             else if(GameManager.checkForBlackjack(dealerHand)){
                 System.out.println("The dealer got a blackjack! You lose your $" + wager + " wager.");
@@ -172,10 +229,15 @@ public class SinglePlayer {
                     System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
                     money += insuranceWager;
                 }
-
             }
             else{
                 //No busts, no blackjacks
+                if(insuranceWager != 0.0){
+                    //They took insurance
+                    System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
+                    money -= insuranceWager;
+                }
+
                 if(Hand.getPoints(playerHand) == Hand.getPoints(dealerHand)){
                     System.out.println("It's a push! You don't lose or gain anything!");
                 }

@@ -1,8 +1,8 @@
 /*
 // File:             Dealer.java
 // Created:          2018/04/05
-// Author:           [author]
-// Description:      Describe function here.
+// Author:           danIv (Daniel Ivanovich)
+// Description:      The class that handles giving out cards, shuffling, and the dealer's decision making.
 */
 
 import java.util.Random;
