@@ -22,7 +22,6 @@ public class HowToPlay {
     println("Stand: Player stands pat with his cards.");
     println("Hit: Player draws another card (and more if he wishes). If this card causes the player's total points to exceed 21 (known as \"breaking\" or \"busting\") then he loses.");
     println("Double: Player doubles his bet and gets one, and only one, more card.");
-    println("Split: If the player has a pair, or any two 10-point cards, then he may double his bet and separate his cards into two individual hands. The dealer will automatically give each card a second card. Then, the player may hit, stand, or double normally.\nHowever, when splitting aces, each ace gets only one card.\nIf the player gets a ten and ace after splitting, then it counts as 21 points, not a blackjack.");
     println("Surrender: The player forfeits half his wager, keeping the other half, and does not play out his hand. This option is only available on the initial two cards.");
     println("After each player has had his turn, the dealer will turn over his hole card. If the dealer has 16 or less, then he will draw another card. If he has an ace and another set of cards totaling 6 points, it is said that he has a \"Soft 17\". In this casino, the dealer is forced to hit on a soft 17.");
     println("If the dealer goes over 21 points, then any player who didn't already bust will win.");

@@ -2,20 +2,19 @@
 // File:             SinglePlayer.java
 // Created:          2018/04/05
 // Author:           danIv
-// Description:      The single player game.
+// Description:      The single player version of Blackjack.
 */
 
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import java.util.Random;
 import java.util.Scanner;
 
 public class SinglePlayer {
     public static double money;
     public static double wager;
     public static double insuranceWager;
-    public static void main(String[] args) {
+    public static void runGame() {
         Scanner reader = new Scanner(System.in);
 
         String name = GameManager.getName(reader);
@@ -85,12 +84,10 @@ public class SinglePlayer {
                     System.out.println("You have recieved a " + playerHand.hand.get(playerHand.hand.size() - 1).suit.symbol + playerHand.hand.get(playerHand.hand.size() - 1).name);
                     playStillGoing = false;
                 }
-                else if(choice.equals("St")){
+                else if(choice.equals("S")){
                     playStillGoing = false;
                     break;
                 }
-                //    else if(choice.equals("Sp"))
-                //      //Split the player's hand into two hands
                 else {
                     if(firstPlay){
                         wager *= 0.5;

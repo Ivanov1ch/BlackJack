@@ -115,11 +115,11 @@ public class GameManager {
     public static String getChoice(Scanner reader) {
         String choice;
         while (true) {
-            System.out.println("(H)it, (St)and, (Sp)lit, (D)ouble, (Su)rrender");
+            System.out.println("(H)it, (S)and, (D)ouble, (Su)rrender");
             choice = reader.nextLine();
             boolean accepted = false;
 
-            String[] acceptedAnswers = {"H", "St", "Sp", "D", "Su"};
+            String[] acceptedAnswers = {"H", "S", "D", "Su"};
             for (int i = 0; i < acceptedAnswers.length; i++) {
                 if (choice.equals(acceptedAnswers[i])) {
                     accepted = true;

@@ -27,16 +27,15 @@ public class MainMenu {
   
   public static void printMenu(){
     System.out.println("Enter the number to launch the corresponding option. \n");
-    System.out.println("1. Blackjack - single player");
-    System.out.println("2. Blackjack - multiple players");
-    System.out.println("3. Blackjack - how to play");
-    System.out.println("4. About this game");
-    System.out.println("5. Exit");
+    System.out.println("1. Play Blackjack");
+    System.out.println("2. Blackjack - how to play");
+    System.out.println("3. About this game");
+    System.out.println("4. Exit");
   }
   
   public static int getInput(Scanner scanner, int[] acceptedAnswers){
     boolean validInput = false;
-    int input = 5;            //Default to exit
+    int input = 4;            //Default to exit
     
     while(!validInput){
       input = scanner.nextInt();
@@ -58,21 +57,17 @@ public class MainMenu {
   }
   
   public static boolean runProgram(int input){
-    if(input == 5){
+    if(input == 4){
       return false;
     }
     else{
-      
-      /*
+
       if(input == 1)
-        SinglePlayer.main(null);
+        SinglePlayer.runGame();
       else if(input == 2)
-        //Run 2 player Blackjack here
-      else if(input == 3)
         HowToPlay.main(null);
       else
         AboutThisGame.main(null);
-      */
         
       return true;
     }
