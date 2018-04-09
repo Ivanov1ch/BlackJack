@@ -19,6 +19,7 @@ public class Hand {
 
     public static int getPoints(Hand inputtedHand){
         int points = 0;
+        boolean hasAnAce = false;
 
           for(int i=0; i<inputtedHand.hand.size(); i++){
             if(!inputtedHand.hand.get(i).name.equals("Ace")){
@@ -27,20 +28,23 @@ public class Hand {
                 else
                     points += 10;
             }
+            else{
+                hasAnAce = true;
+            }
         }
-        Hand tempHand = copyHandWithoutAces(copyHand(inputtedHand));
-        if(tempHand.hand.size() == 0){
-            //inputtedHand.hand.stream().forEach(System.out::println);
-            points = (11 + inputtedHand.hand.size() - 1);
-            //System.out.println(points);
-        }
-        else if(points <= 10) {
-            points += 11;
-            acePoints = 11;
-        }
-        else {
-            points += 1;
-            acePoints = 1;
+        if(hasAnAce) {
+            Hand tempHand = copyHandWithoutAces(copyHand(inputtedHand));
+            if (tempHand.hand.size() == 0) {
+                //inputtedHand.hand.stream().forEach(System.out::println);
+                points = (11 + inputtedHand.hand.size() - 1);
+                //System.out.println(points);
+            } else if (points <= 10) {
+                points += 11;
+                acePoints = 11;
+            } else {
+                points += 1;
+                acePoints = 1;
+            }
         }
 
         return points;
@@ -91,12 +95,7 @@ public class Hand {
     }
 
     public static Hand clearHand(Hand inputtedHand){
-        ArrayList<Card> tempList = new ArrayList<>();
-        for(int i = 0; i < inputtedHand.hand.size(); i++){
-            tempList.add(Card.copyCard(inputtedHand.hand.get(i)));
-        }
-
-        inputtedHand.hand.removeAll(tempList);
+        inputtedHand.hand.clear();
 
         return inputtedHand;
     }

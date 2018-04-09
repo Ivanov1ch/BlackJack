@@ -9,7 +9,7 @@
 public class HowToPlay {
   public static void main (String[] args){
     println("The object of blackjack is to beat the dealer. To beat the dealer the player must first not bust (go over 21) and second either outscore the dealer or have the dealer bust.");
-    println("Blackjack may be played with one to eight decks of 52-card decks. This game will use just one.");
+    println("Blackjack may be played with one to eight decks of 52-card decks. This game will use six.");
     println("Aces may be counted as 1 or 11 points");
     println("Normal cards are worth as many points as their number (i.e. 9 of diamonds = 9 points)");
     println("Tens and face cards count as 10 points.");

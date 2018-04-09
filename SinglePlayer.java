@@ -152,7 +152,7 @@ public class SinglePlayer {
 
             while(true) {
                 System.out.println("Would you like to play another hand? Y/N");
-                String answer = reader.nextLine();
+                String answer = reader.nextLine().toUpperCase();
                 if (answer.equals("Y") || answer.equals("N")) {
                     if(answer.equals("Y")){
                         playing = true;

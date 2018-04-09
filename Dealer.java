@@ -33,12 +33,13 @@ public class Dealer {
 
     public static void initDeck(Stack<Card> gameDeck) {
         final int NUM_SUITS = 4;
+        final int STARTING_CARD_NUMBER = 2;
         final int CARDS_PER_SUIT = 14;
         final int DECKS_USED = 6;
 
         for (int dck = 1; dck <= DECKS_USED; dck++) {
             for (int suit = 0; suit < NUM_SUITS; suit++) {
-                for (int card = 2; card <= CARDS_PER_SUIT; card++) {
+                for (int card = STARTING_CARD_NUMBER; card <= CARDS_PER_SUIT; card++) {
                     gameDeck.add(Card.initCard(card, Card.Suit.values()[suit]));
                 }
             }
@@ -100,7 +101,7 @@ public class Dealer {
                 }
                 System.out.println("The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name);
             } else if (GameManager.softNumber(myHand, 17)) {
-                //t's a soft 17
+                //It's a soft 17
                 System.out.println("It's a soft 17. The dealer is hitting...");
                 dealCard(myHand.hand);
                 //Wait
