@@ -141,16 +141,33 @@ public class GameManager {
     }
 
     public static boolean softNumber(Hand givenHand, int targetNumber) {
-        int handPoints = Hand.getPoints(givenHand);              //Forces the Hand class to correctly assign aceValue
-        if (Hand.acePoints == 11) {
-            if (handPoints == targetNumber) {
-                return true;
+        boolean hasAce = false;
+        for(int i=0; i < givenHand.hand.size(); i++) {
+            if(givenHand.hand.get(i).name.equals("Ace")){
+                hasAce = true;
+                break;
+            }
+        }
+        if(hasAce) {
+            int handPoints = Hand.getPoints(givenHand);              //Forces the Hand class to correctly assign aceValue
+            if (Hand.acePoints == 11) {
+                //It's a soft hand
+                if (handPoints == targetNumber) {
+                    return true;
+                } else {
+                    //The soft hand doesn't add up
+                    return false;
+                }
             } else {
+                //The ace is being valued as a 1 (It's a hard hand)
                 return false;
             }
-        } else {
+        }
+        else{
+            //No ace
             return false;
         }
+
     }
 
     public static boolean checkForBlackjack(Hand givenHand) {

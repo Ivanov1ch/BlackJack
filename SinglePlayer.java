@@ -141,8 +141,11 @@ public class SinglePlayer {
 
             System.out.println("\nYou have $" + money + " left.");
 
+            /*****RESET******/
             Hand.clearHand(playerHand);
             Hand.clearHand(Dealer.hand);
+            insuranceWager = 0;
+            wager = 0;
 
             if(money < 0){
                 System.out.println("\nYou really screwed up now, didn't you? Now you owe us $" + (-1 * money) + ".\nExpect a bill.\nGet out of here.\n");
