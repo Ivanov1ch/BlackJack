@@ -71,7 +71,20 @@ public class Dealer {
         gameDeck.removeAllElements();
     }
 
-    public static void useTurn(Hand myHand, Stack<Card> myDeck) {
+    public static void revealHand(){
+        System.out.println("\n\nFlipping over the card in the hole...");
+
+        //Wait
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ie) {
+
+        }
+
+        System.out.println("\n\nThe dealer's 2 cards are: " + Hand.printFullHand(Dealer.hand));
+    }
+
+    public static void useTurn(Hand myHand) {
 
         boolean stillGoing = true;
 
@@ -90,7 +103,7 @@ public class Dealer {
 
             if (GameManager.checkForBust(myHand)) {
                 stillGoing = false;
-            } else if (Hand.getPoints(myHand) <= 16) {
+            } else if (Hand.getPoints(myHand) < 16) {
                 System.out.println("The dealer has less than 16 points, and is hitting...");
                 dealCard(myHand.hand);
                 //Wait

@@ -149,7 +149,7 @@ public class GameManager {
             }
         }
         if(hasAce) {
-            int handPoints = Hand.getPoints(givenHand);              //Forces the Hand class to correctly assign aceValue
+            int handPoints = Hand.getPoints(givenHand);              //Forces the Hand class to correctly assign acePoints
             if (Hand.acePoints == 11) {
                 //It's a soft hand
                 if (handPoints == targetNumber) {

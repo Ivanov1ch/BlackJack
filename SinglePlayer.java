@@ -8,7 +8,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import java.util.Scanner;
 
 public class SinglePlayer {
     public static double money;
@@ -31,12 +30,12 @@ public class SinglePlayer {
             if(money < 0){
                 System.out.println("You really screwed up now, didn't you? Now you owe us $" + (-1 * money) + ".\nExpect a bill.");
                 playing = false;
-                break;
+                System.exit(10); //10 = Bad money
             }
             else if(money < 1.00){
                 System.out.println("You don't have enough money to keep playing!");
                 playing = false;
-                break;
+                System.exit(10); //10 = Bad money
             }
             Dealer.resetDeck(Dealer.deck);
             Dealer.initDeck(Dealer.deck);
@@ -135,7 +134,12 @@ public class SinglePlayer {
 
             }
 
-            Dealer.useTurn(Dealer.hand, Dealer.deck);
+            if(!blackjack) {
+                Dealer.useTurn(Dealer.hand);
+            }
+            else{
+                Dealer.revealHand();
+            }
 
             getWinner(playerHand, Dealer.hand, blackjack, bust);
 

@@ -2,7 +2,7 @@
 // File:             Card.java
 // Created:          2018/04/05
 // Author:           danIv (Daniel Ivanovich)
-// Description:      .
+// Description:      The class for every card in the deck.
 */
 
 
