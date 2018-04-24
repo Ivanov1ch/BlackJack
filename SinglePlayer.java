@@ -8,21 +8,26 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.io.*;
 
 public class SinglePlayer {
     public static double money;
     public static double wager;
     public static double insuranceWager;
-    public static void runGame() {
+    public static void runGame() throws IOException  {
         Scanner reader = new Scanner(System.in);
+        PrintWriter writer = new PrintWriter(new File("game log.txt"));
+
+        int handCounter = 0;
 
         String name = GameManager.getName(reader);
 
         money = GameManager.getMoney(reader);
 
-        if (money == -1) {
-            System.exit(10); //10 = Bad money
-        }
+        writer.println("NEW GAME STARTED");
+        writer.println("PLAYER INFO: ");
+        writer.println("NAME: " + name);
+        writer.println("STARTING MONEY: $" + money);
 
         boolean playing = true;
 
@@ -48,6 +53,9 @@ public class SinglePlayer {
             Hand playerHand = new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
             Dealer.hand =  new Hand(new ArrayList<Card>(Dealer.dealStartingCards(Dealer.deck)));
 
+            handCounter++;
+
+            writer.print("Hand " +  handCounter + ": " + name + "'s final hand was: ");
 
             while(true) {
                 wager = GameManager.getWager(reader, 1.00);
@@ -141,9 +149,17 @@ public class SinglePlayer {
                 Dealer.revealHand();
             }
 
-            getWinner(playerHand, Dealer.hand, blackjack, bust);
+            String handPrint = Hand.printFullHand(playerHand) + "and the dealer's final hand was: " + Hand.printFullHand(Dealer.hand);
+            handPrint = handPrint.substring(0, handPrint.length() - 2);
+
+            writer.print(handPrint + ". ");
+            writer.print(name + " wagered $" + wager + " and ");
+
+            getWinner(playerHand, Dealer.hand, blackjack, bust, writer);
 
             System.out.println("\nYou have $" + money + " left.");
+
+            writer.println("\n" + name + " has $" + money + " left.");
 
             /*****RESET******/
             Hand.clearHand(playerHand);
@@ -174,9 +190,10 @@ public class SinglePlayer {
                 System.out.println("I'm sorry, but '" + answer + "' is not a valid input.");
             }
         }
+        writer.close();
     }
 
-    public static void getWinner(Hand playerHand, Hand dealerHand, boolean playerBlackjack, boolean playerBust){
+    public static void getWinner(Hand playerHand, Hand dealerHand, boolean playerBlackjack, boolean playerBust, PrintWriter writer){
         if(playerBust){
             //The player goes first, so it checks if the player busted first.
             System.out.println("You busted! You lose your wager of $" + wager + ".");
@@ -186,6 +203,7 @@ public class SinglePlayer {
                     //They took insurance
                     System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
                     money -= insuranceWager;
+                    writer.print("lost $" + insuranceWager + " from insurance, and also ");
                 }
             }
             else{
@@ -194,17 +212,21 @@ public class SinglePlayer {
                     insuranceWager *= 2;
                     System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
                     money += insuranceWager;
+                    writer.print("won $" + insuranceWager + " from insurance, and also ");
                 }
             }
+            writer.print("lost $" + wager + ". ");
         }
         else if(GameManager.checkForBust(dealerHand)){
-            System.out.println("The dealer busted! You win your wager of $" + wager + ".");
+            System.out.println("The dealer busted! You win your wager of $" + wager + ". ");
             money += wager;
             if(insuranceWager != 0.0){
                 //They took insurance
                 System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
                 money -= insuranceWager;
+                writer.print("lost $" + insuranceWager + " from insurance, and also ");
             }
+            writer.print("won $" + wager);
         }
         else{
             //Neither busted
@@ -216,16 +238,20 @@ public class SinglePlayer {
                     insuranceWager *= 2;
                     System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
                     money += insuranceWager;
+                    writer.print("won $" + insuranceWager + " from insurance, and also ");
                 }
+                writer.print("tied with the dealer.");
             }
             else if(playerBlackjack){
                 wager *= 1.5;
-                System.out.println("You got a blackjack! You win 3:2 on your wager, or $" + wager + ".");
+                System.out.println("You got a blackjack! You win 3:2 on your wager, or $" + wager + ". ");
                 if(insuranceWager != 0.0){
                     //They took insurance
                     System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
                     money -= insuranceWager;
+                    writer.print("lost $" + insuranceWager + " from insurance, and also ");
                 }
+                writer.print("won $" + wager + " with a blackjack.");
             }
             else if(GameManager.checkForBlackjack(dealerHand)){
                 System.out.println("The dealer got a blackjack! You lose your $" + wager + " wager.");
@@ -235,7 +261,9 @@ public class SinglePlayer {
                     insuranceWager *= 2;
                     System.out.println("However, you win back 2:1 ($" + insuranceWager + ") from your insurance!");
                     money += insuranceWager;
+                    writer.print("won $" + insuranceWager + " from insurance, and also ");
                 }
+                writer.print("lost $" + wager + ". ");
             }
             else{
                 //No busts, no blackjacks
@@ -243,18 +271,22 @@ public class SinglePlayer {
                     //They took insurance
                     System.out.println("The dealer didn't have a blackjack! You lose your $" + insuranceWager + " insurance!");
                     money -= insuranceWager;
+                    writer.print("lost $" + insuranceWager + " from insurance, and also ");
                 }
 
                 if(Hand.getPoints(playerHand) == Hand.getPoints(dealerHand)){
                     System.out.println("It's a push! You don't lose or gain anything!");
+                    writer.print("tied with the dealer.");
                 }
                 else if(Hand.getPoints(playerHand) > Hand.getPoints(dealerHand)){
-                    System.out.println("You win! You get $" + wager + ".");
+                    System.out.println("You win! You get $" + wager + ". ");
                     money += wager;
+                    writer.print("won $" + wager + ". ");
                 }
                 else{
-                    System.out.println("You lose! You lose $" + wager + ".");
+                    System.out.println("You lose! You lose $" + wager + ". ");
                     money -= wager;
+                    writer.print("lost $" + wager + ". ");
                 }
             }
         }
