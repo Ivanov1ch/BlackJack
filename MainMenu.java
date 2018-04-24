@@ -4,7 +4,6 @@
 // Author:           daniv (Daniel Ivanovich)
 // Description:      The main menu for the Blackjack game.
 */
-import java.io.IOException;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -63,14 +62,8 @@ public class MainMenu {
     }
     else{
 
-      if(input == 1) {
-          try {
-              SinglePlayer.runGame();
-          }
-          catch(IOException e){
-              e.printStackTrace();
-          }
-      }
+      if(input == 1)
+        SinglePlayer.runGame();
       else if(input == 2)
         HowToPlay.main(null);
       else
