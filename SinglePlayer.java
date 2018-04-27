@@ -8,13 +8,14 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-import javax.swing.*;
 
 public class SinglePlayer {
     public static double money;
     public static double wager;
     public static double insuranceWager;
     public static void runGame() {
+        Scanner reader = new Scanner(System.in);
+
         String name = GameManager.getName(reader);
 
         money = GameManager.getMoney(reader);
