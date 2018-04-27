@@ -4,55 +4,72 @@
 // Author:           daniv (Daniel Ivanovich)
 // Description:      The main menu for the Blackjack game.
 */
-
-import javax.swing.*;
-import java.awt.Image;
-import java.io.IOException;
-import java.net.URL;
-import javax.imageio.ImageIO;
+import java.util.Scanner;
 
 public class MainMenu {
-    public static void main(String[] args) throws IOException {
-        URL menuIconURL = new URL("https://images-na.ssl-images-amazon.com/images/I/81w49Xr-7QL.png");
-
-        ImageIcon mainMenuIcon = new ImageIcon();
-
-        try {
-            Image mainMenuImage = ImageIO.read(menuIconURL);
-            mainMenuIcon = new ImageIcon(mainMenuImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Object[] playOptions = {"Play Blackjack", "How to Play Blackjack", "About this Game"};
-
-        while (true) {
-            String choice = (String) JOptionPane.showInputDialog(null,
-                    "Welcome to the Java Casino!\nWhat would you like to do today?",
-                    "Java Casino",
-                    JOptionPane.PLAIN_MESSAGE,
-                    mainMenuIcon,
-                    playOptions,
-                    playOptions[0]);
-
-            if (choice != null) {
-                if (choice.length() > 0) {
-                    runFromChoice(choice, playOptions);
-                } else {
-                    System.exit(10);
-                }
-            } else {
-                System.exit(10); //10 = invalid choice
-            }
-        }
+  public static void main (String[] args){
+    Scanner scanner = new Scanner(System.in);
+    
+    int[] acceptedAnswers = {1, 2, 3, 4, 5};
+    
+    System.out.println("Welcome to the Java Casino!");
+    
+    //While playing
+    while(true){
+    
+      printMenu();
+      if(!runProgram(getInput(scanner, acceptedAnswers))) //It returns false if its time to break, but otherwise runs some code.
+        break;
+    
     }
-
-    public static void runFromChoice(String choice, Object[] playOptions) {
-        if (choice.equals(playOptions[0]))
-            SinglePlayer.runGame();
-        else if (choice.equals(playOptions[1]))
-            HowToPlay.main(null);
-        else if (choice.equals(playOptions[2]))
-            AboutThisGame.main(null);
+    scanner.close();
+  }
+  
+  public static void printMenu(){
+    System.out.println("Enter the number to launch the corresponding option. \n");
+    System.out.println("1. Play Blackjack");
+    System.out.println("2. Blackjack - how to play");
+    System.out.println("3. About this game");
+    System.out.println("4. Exit");
+  }
+  
+  public static int getInput(Scanner scanner, int[] acceptedAnswers){
+    boolean validInput = false;
+    int input = 4;            //Default to exit
+    
+    while(!validInput){
+      input = scanner.nextInt();
+      scanner.nextLine();      //Clear the newline character
+      
+      for(int i = 0; i < acceptedAnswers.length; i++){
+        if(input == acceptedAnswers[i]){
+          validInput = true;
+          return input;        //Don't say the input is invalid.
+        }
+      }
+      
+      System.out.println("Sorry, but '" + input + "' is not a valid input.\nPlease enter a number between " + acceptedAnswers[0] + " and " + acceptedAnswers[acceptedAnswers.length] /*The last element*/ + ".");
+      
     }
+    
+    return input;
+    
+  }
+  
+  public static boolean runProgram(int input){
+    if(input == 4){
+      return false;
+    }
+    else{
+
+      if(input == 1)
+        SinglePlayer.runGame();
+      else if(input == 2)
+        HowToPlay.main(null);
+      else
+        AboutThisGame.main(null);
+        
+      return true;
+    }
+  }
 }
