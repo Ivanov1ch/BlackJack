@@ -5,18 +5,16 @@
 // Description:      Contains all the general functions to run the game.
 */
 
-
+import javax.swing.*;
 import java.util.Scanner;
 
 public class GameManager {
 
-    public static double getMoney(Scanner reader) {
+    public static double getMoney() {
         double money = 0;
 
         while (!false) {
-            System.out.println("How much money do you have? You must have at least 1 dollar to play.");
-            money = reader.nextDouble();
-            reader.nextLine();
+            money = (double)JOptionPane.showInputDialog(null, "How much money do you have? You must have at least 1 dollar to play.", "Player info", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
             String text = Double.toString(Math.abs(money));
             int integerPlaces = text.indexOf('.');
@@ -26,36 +24,32 @@ public class GameManager {
                 break;
             }
 
-            System.out.println("You do not have enough money to begin or entered an invalid amount. Please get more money or check your decimals and try again.");
-            return -1;
+            JOptionPane.showMessageDialog(null, "You do not have enough money to begin or entered an invalid amount. Please get more money or check your decimals and try again.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
         return money;
     }
 
-    public static String getName(Scanner reader) {
-        String name = "";
+    public static String getName() {
+        String name;
 
         while (!false) {
-            System.out.println("Welcome to the table, what is your name?");
-            name = reader.nextLine();
+            name = (String)JOptionPane.showInputDialog(null, "Welcome to the table, what is your name?", "Player Info", JOptionPane.PLAIN_MESSAGE, null, null, "name");
 
             if (name.length() >= 3) {
                 break;
             }
 
-            System.out.println("Sorry, but '" + name + "' is not a valid name.");
+            JOptionPane.showMessageDialog(null, "Sorry, but '" + name + "' is not a valid name.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
         return name;
     }
 
-    public static double getWager(Scanner reader, double minWager) {
-        double wager = 0;
+    public static double getWager(double minWager) {
+        double wager;
         while (!false) {
-            System.out.println("What would you like to wager on this hand?");
-            wager = reader.nextDouble();
-            reader.nextLine();
+            wager = (double)JOptionPane.showInputDialog(null, "What would you like to wager on this hand?", "Wager", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
             String text = Double.toString(Math.abs(wager));
             int integerPlaces = text.indexOf('.');
@@ -65,32 +59,29 @@ public class GameManager {
                 break;
             }
 
-            System.out.println("Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".");
+            JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
         return wager;
 
     }
 
-    public static double getInsuranceWager(Scanner reader, double minWager) {
+    public static double getInsuranceWager(double minWager) {
         double wager;
         String answer;
         while (true) {
-            System.out.println("Would you like to take insurance? Y/N");
-            answer = reader.nextLine();
+            answer = (String)JOptionPane.showInputDialog(null, "Would you like to take insurance? Y/N", "Insurance", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
             if (answer.toUpperCase().equals("Y") || answer.toUpperCase().equals("N")) {
                 break;
             }
 
-            System.out.println("Sorry, but '" + answer + "' is not a valid input. \n");
+            JOptionPane.showMessageDialog(null, "Sorry, but '" + answer + "' is not a valid input.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
         while (true) {
             if (answer.toUpperCase().equals("Y")) {
-                System.out.println("What is your insurance wager?");
-                wager = reader.nextDouble();
-                reader.nextLine();
+                wager = (double)JOptionPane.showInputDialog(null, "What is your insurance wager?", "Insurance", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
                 String text = Double.toString(Math.abs(wager));
                 int integerPlaces = text.indexOf('.');
@@ -100,10 +91,10 @@ public class GameManager {
                     break;
                 }
 
-                System.out.println("Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".");
+                JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
             }
             else{
-                System.out.println("Denied insurance.");
+                JOptionPane.showMessageDialog(null, "Denied insurance.", "Insurance", JOptionPane.PLAIN_MESSAGE);
                 return 0.0;
             }
         }
@@ -115,7 +106,7 @@ public class GameManager {
     public static String getChoice(Scanner reader) {
         String choice;
         while (true) {
-            System.out.println("(H)it, (S)and, (D)ouble, (Su)rrender");
+            System.out.println("(H)it, (S)tand, (D)ouble, (Su)rrender");
             choice = reader.nextLine();
 
             String partOne = Character.toString(choice.charAt(0)).toUpperCase();
