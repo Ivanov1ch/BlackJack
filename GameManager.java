@@ -14,7 +14,7 @@ public class GameManager {
         double money = 0;
 
         while (!false) {
-            money = Double.parseDouble((String)JOptionPane.showInputDialog(null, "How much money do you have? You must have at least 1 dollar to play.", "Player info", JOptionPane.PLAIN_MESSAGE, null, null, null));
+            money = (double)JOptionPane.showInputDialog(null, "How much money do you have? You must have at least 1 dollar to play.", "Player info", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
             String text = Double.toString(Math.abs(money));
             int integerPlaces = text.indexOf('.');
@@ -34,7 +34,7 @@ public class GameManager {
         String name;
 
         while (!false) {
-            name = (String)JOptionPane.showInputDialog(null, "Welcome to the table, what is your name?", "Player Info", JOptionPane.PLAIN_MESSAGE, null, null, "");
+            name = (String)JOptionPane.showInputDialog(null, "Welcome to the table, what is your name?", "Player Info", JOptionPane.PLAIN_MESSAGE, null, null, "name");
 
             if (name.length() >= 3) {
                 break;
@@ -46,46 +46,55 @@ public class GameManager {
         return name;
     }
 
-    public static double getWager(double minWager, double maxWager) {
+    public static double getWager(double minWager) {
         double wager;
         while (!false) {
-            wager = Double.parseDouble((String)JOptionPane.showInputDialog(null, "What would you like to wager on this hand?", "Wager", JOptionPane.PLAIN_MESSAGE, null, null, null));
+            wager = (double)JOptionPane.showInputDialog(null, "What would you like to wager on this hand?", "Wager", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
             String text = Double.toString(Math.abs(wager));
             int integerPlaces = text.indexOf('.');
             int decimalPlaces = text.length() - integerPlaces - 1;
 
-            if (wager >= minWager && decimalPlaces <= 2 && !(wager > maxWager)) {
+            if (wager >= minWager && decimalPlaces <= 2) {
                 break;
             }
 
-            JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ", and wager less than $" + maxWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
         }
 
         return wager;
 
     }
 
-    public static double getInsuranceWager(double minWager, double maxWager) {
+    public static double getInsuranceWager(double minWager) {
         double wager;
-        int answer = -9999;
-            answer = JOptionPane.showConfirmDialog(null, "Would you like to take insurance?", "Insurance", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        String answer;
+        while (true) {
+            answer = (String)JOptionPane.showInputDialog(null, "Would you like to take insurance? Y/N", "Insurance", JOptionPane.PLAIN_MESSAGE, null, null, null);
+
+            if (answer.toUpperCase().equals("Y") || answer.toUpperCase().equals("N")) {
+                break;
+            }
+
+            JOptionPane.showMessageDialog(null, "Sorry, but '" + answer + "' is not a valid input.", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
 
         while (true) {
-            if (answer == JOptionPane.YES_OPTION) {
-                wager = Double.parseDouble((String)JOptionPane.showInputDialog(null, "What is your insurance wager?", "Insurance", JOptionPane.PLAIN_MESSAGE, null, null, null));
+            if (answer.toUpperCase().equals("Y")) {
+                wager = (double)JOptionPane.showInputDialog(null, "What is your insurance wager?", "Insurance", JOptionPane.PLAIN_MESSAGE, null, null, null);
 
                 String text = Double.toString(Math.abs(wager));
                 int integerPlaces = text.indexOf('.');
                 int decimalPlaces = text.length() - integerPlaces - 1;
 
-                if (wager >= minWager && decimalPlaces <= 2 && !(wager > maxWager)) {
+                if (wager >= minWager && decimalPlaces <= 2) {
                     break;
                 }
 
-                JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ", and wager less than $" + maxWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Sorry, but $" + wager + " is not a valid wager.\nPlease either match or raise $" + minWager + ".", "Error!", JOptionPane.ERROR_MESSAGE);
             }
             else{
+                JOptionPane.showMessageDialog(null, "Denied insurance.", "Insurance", JOptionPane.PLAIN_MESSAGE);
                 return 0.0;
             }
         }
@@ -94,10 +103,11 @@ public class GameManager {
 
     }
 
-    public static String getChoice() {
+    public static String getChoice(Scanner reader) {
         String choice;
         while (true) {
-            choice = (String)JOptionPane.showInputDialog(null, "(H)it, (S)tand, (D)ouble, or (Su)rrender", "What do you want to do?", JOptionPane.QUESTION_MESSAGE);
+            System.out.println("(H)it, (S)tand, (D)ouble, (Su)rrender");
+            choice = reader.nextLine();
 
             String partOne = Character.toString(choice.charAt(0)).toUpperCase();
             choice = partOne + choice.substring(1);
@@ -115,7 +125,7 @@ public class GameManager {
             if (accepted)
                 break;
 
-           JOptionPane.showMessageDialog(null, "Sorry, but '" + choice + "' is not an accepted input.", "Error!", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Sorry, but '" + choice + "' is not an accepted input.\n");
         }
 
         return choice;

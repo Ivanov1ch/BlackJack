@@ -5,7 +5,6 @@
 // Description:      The class that handles giving out cards, shuffling, and the dealer's decision making.
 */
 
-import javax.swing.*;
 import java.util.Random;
 import java.util.Stack;
 import java.util.List;
@@ -34,7 +33,7 @@ public class Dealer {
 
     public static void initDeck(Stack<Card> gameDeck) {
         final int NUM_SUITS = 4;
-        final int STARTING_CARD_NUMBER = 14;
+        final int STARTING_CARD_NUMBER = 2;
         final int CARDS_PER_SUIT = 14;
         final int DECKS_USED = 6;
 
@@ -72,8 +71,8 @@ public class Dealer {
         gameDeck.removeAllElements();
     }
 
-    public static void revealHand() {
-        JOptionPane.showMessageDialog(null, "Your turn is now over. Flipping over the card in the hole...", "", JOptionPane.PLAIN_MESSAGE);
+    public static void revealHand(){
+        System.out.println("\n\nFlipping over the card in the hole...");
 
         //Wait
         try {
@@ -82,21 +81,30 @@ public class Dealer {
 
         }
 
-        JOptionPane.showMessageDialog(null, "The dealer's 2 cards are: " + Hand.printFullHand(Dealer.hand) + ".", "", JOptionPane.PLAIN_MESSAGE);
+        System.out.println("\n\nThe dealer's 2 cards are: " + Hand.printFullHand(Dealer.hand));
     }
 
     public static void useTurn(Hand myHand) {
 
         boolean stillGoing = true;
 
-        revealHand();
+        System.out.println("\n\nYour turn is over. It is now the dealer's turn.\n\nFlipping over the card in the hole...");
+
+        //Wait
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ie) {
+
+        }
+
+        System.out.println("\n\nThe dealer's 2 cards are: " + Hand.printFullHand(Dealer.hand));
 
         while (stillGoing) {
 
             if (GameManager.checkForBust(myHand)) {
                 stillGoing = false;
             } else if (Hand.getPoints(myHand) < 16) {
-                JOptionPane.showMessageDialog(null, "The dealer has less than 16 points, and is hitting...", "", JOptionPane.PLAIN_MESSAGE);
+                System.out.println("The dealer has less than 16 points, and is hitting...");
                 dealCard(myHand.hand);
                 //Wait
                 try {
@@ -104,10 +112,10 @@ public class Dealer {
                 } catch (InterruptedException ie) {
 
                 }
-                JOptionPane.showMessageDialog(null, "The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name, "", JOptionPane.PLAIN_MESSAGE);
+                System.out.println("The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name);
             } else if (GameManager.softNumber(myHand, 17)) {
                 //It's a soft 17
-                JOptionPane.showMessageDialog(null, "It's a soft 17. The dealer is hitting...", "", JOptionPane.PLAIN_MESSAGE);
+                System.out.println("It's a soft 17. The dealer is hitting...");
                 dealCard(myHand.hand);
                 //Wait
                 try {
@@ -115,16 +123,15 @@ public class Dealer {
                 } catch (InterruptedException ie) {
 
                 }
-                JOptionPane.showMessageDialog(null, "The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name, "", JOptionPane.PLAIN_MESSAGE);
+                System.out.println("The dealer drew a " + myHand.hand.get(myHand.hand.size() - 1).suit.symbol + myHand.hand.get(myHand.hand.size() - 1).name);
             } else {
-                JOptionPane.showMessageDialog(null, "The dealer is standing.", "", JOptionPane.PLAIN_MESSAGE);
+                System.out.println("The dealer is standing.\n");
                 stillGoing = false;
             }
 
         }
 
-        JOptionPane.showMessageDialog(null, "The dealer's final cards are: " + Hand.printFullHand(Dealer.hand) + ".", "", JOptionPane.PLAIN_MESSAGE);
-
+        System.out.println("\n\nThe dealer's final cards are: " + Hand.printFullHand(Dealer.hand) + "\n");
 
         //Wait
         try {
