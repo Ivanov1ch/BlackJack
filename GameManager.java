@@ -115,7 +115,7 @@ public class GameManager {
     public static String getChoice(Scanner reader) {
         String choice;
         while (true) {
-            System.out.println("(H)it, (S)and, (D)ouble, (Su)rrender");
+            System.out.println("(H)it, (S)tand, (D)ouble, (Su)rrender");
             choice = reader.nextLine();
 
             String partOne = Character.toString(choice.charAt(0)).toUpperCase();
